@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
+<HBox alignment="CENTER" prefHeight="900.0" prefWidth="1600.0" spacing="20.0" xmlns="http://javafx.com/javafx/17.0.12"
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="me.bdats_projc.Controller">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+    </padding>
+
+    <!-- Levý panel pro ovládání -->
+    <VBox alignment="TOP_CENTER" prefHeight="860.0" prefWidth="300.0" spacing="20.0">
+        <padding>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+        </padding>
+        <Label text="Ovládání"/>
+        <!-- Výběr priority pro haldu -->
+        <ChoiceBox fx:id="prohlType" prefWidth="150.0">
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="Podle názvu"/>
+                    <String fx:value="Podle počtu obyvatel"/>
+                </FXCollections>
+            </items>
+        </ChoiceBox>
+        <Button onAction="#onLoadButtonClick" text="Načíst"/>
+        <Button onAction="#onUpdateButtonClick" text="Aktualizovat"/>
+        <Button onAction="#onRandomButtonClick" text="Vytvořit náhodnou obec"/>
+        <Button onAction="#onExportButtonClick" text="Uložit"/>
+        <Button onAction="#onDestroyButtonClick" text="Zrušit"/>
+    </VBox>
+
+    <!-- Pravý panel pro formulář zadání nové obce -->
+    <VBox alignment="TOP_CENTER" prefHeight="860.0" prefWidth="300.0" spacing="20.0">
+        <padding>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+        </padding>
+        <Label text="Formulář pro novou obec"/>
+        <Label text="Název"/>
+        <TextField fx:id="name" />
+        <Label text="PSČ"/>
+        <TextField fx:id="psc" />
+        <Label text="Celkem Obyvatel"/>
+        <TextField fx:id="allNo" />
+        <Label text="Počet mužů"/>
+        <TextField fx:id="manNo" />
+        <Label text="Počet žen"/>
+        <TextField fx:id="womanNo" />
+        <!-- Tlačítko pro přidání nové obce -->
+        <Button onAction="#onAddButtonClick" text="Přidat obec"/>
+        <!-- Tlačítko pro hledání obce -->
+        <Button onAction="#onFindButtonClick" text="Načíst první obec"/>
+        <!-- Tlačítko pro odebrání obce -->
+        <Button onAction="#onRemoveButtonClick" text="Odebrat první obec"/>
+    </VBox>
+
+    <!-- Tabulka pro zobrazení obcí -->
+    <ScrollPane fx:id="scrollPane" prefHeight="860.0" prefWidth="900.0">
+        <TableView fx:id="obecTable" prefWidth="900.0">
+            <columns>
+                <TableColumn fx:id="nameColumn" text="Název" prefWidth="200.0" />
+                <TableColumn fx:id="pscColumn" text="PSČ" prefWidth="100.0" />
+                <TableColumn fx:id="populationColumn" text="Počet obyvatel" prefWidth="150.0" />
+                <TableColumn fx:id="muziColumn" text="Počet mužů" prefWidth="100.0" />
+                <TableColumn fx:id="zenyColumn" text="Počet žen" prefWidth="100.0" />
+            </columns>
+        </TableView>
+    </ScrollPane>
+</HBox>
