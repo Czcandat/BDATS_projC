@@ -19,19 +19,15 @@
         </padding>
         <Label text="Ovládání"/>
         <!-- Výběr priority pro haldu -->
-        <ChoiceBox fx:id="prohlType" prefWidth="150.0">
-            <items>
-                <FXCollections fx:factory="observableArrayList">
-                    <String fx:value="Podle názvu"/>
-                    <String fx:value="Podle počtu obyvatel"/>
-                </FXCollections>
-            </items>
-        </ChoiceBox>
+        <Label text="Priorita"/>
+        <ChoiceBox fx:id="priority" />
         <Button onAction="#onLoadButtonClick" text="Načíst"/>
         <Button onAction="#onUpdateButtonClick" text="Aktualizovat"/>
         <Button onAction="#onRandomButtonClick" text="Vytvořit náhodnou obec"/>
         <Button onAction="#onExportButtonClick" text="Uložit"/>
         <Button onAction="#onDestroyButtonClick" text="Zrušit"/>
+        <Label text="Traverse type"/>
+        <ChoiceBox fx:id="traverse"/>
     </VBox>
 
     <!-- Pravý panel pro formulář zadání nové obce -->

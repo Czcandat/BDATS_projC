@@ -1,13 +1,9 @@
 package me.bdats_projc;
 
-import java.util.ArrayList;
-import java.util.Comparator;
+import java.util.*;
 
 public abstract class AbstrHeap<T>
 {
-    public enum Priority
-    {NAME, POPULATION}
-
     private final ArrayList<T> heap;
     private Comparator<T> comparator;
 
@@ -49,12 +45,12 @@ public abstract class AbstrHeap<T>
     public void add(T item)
     {
         this.heap.add(item);
-        heapifyUP(this.heap.size()-1);
+        heapifyUP(this.heap.size() - 1);
     }
 
     public void build(ArrayList<T> items)
     {
-        for(T item : items)
+        for (T item : items)
             this.add(item);
     }
 
@@ -85,17 +81,20 @@ public abstract class AbstrHeap<T>
         }
     }
 
-    private void heapifyDown() {
+    private void heapifyDown()
+    {
         int index = 0;
         int leftChild, rightChild, smallerChild;
 
-        while ((leftChild = 2 * index + 1) < this.heap.size()) {
+        while ((leftChild = 2 * index + 1) < this.heap.size())
+        {
             rightChild = leftChild + 1;
             smallerChild = (rightChild < this.heap.size() &&
                     comparator.compare(this.heap.get(rightChild), this.heap.get(leftChild)) < 0)
                     ? rightChild : leftChild;
 
-            if (comparator.compare(this.heap.get(index), this.heap.get(smallerChild)) <= 0) {
+            if (comparator.compare(this.heap.get(index), this.heap.get(smallerChild)) <= 0)
+            {
                 break;
             }
 
@@ -111,7 +110,97 @@ public abstract class AbstrHeap<T>
         this.heap.set(index2, temp);
     }
 
-    public ArrayList<T> getAllItems() {
+    public ArrayList<T> getAllItems()
+    {
         return new ArrayList<>(heap);
     }
+
+    public Iterator<T> getIterator(TraverseType type) {
+        switch (type) {
+            case TraverseType.DFS:
+                return new DFSIterator();
+            case TraverseType.BFS:
+                return new BFSIterator();
+            default:
+                throw new IllegalArgumentException("Unknown traversal type: " + type);
+        }
+    }
+
+
+    public class DFSIterator implements Iterator<T>
+    {
+        private Stack<Integer> stack;
+
+        public DFSIterator()
+        {
+            stack = new Stack<>();
+            if (!heap.isEmpty())
+            {
+                stack.push(0);
+            }
+        }
+
+        @Override
+        public boolean hasNext()
+        {
+            return !stack.isEmpty();
+        }
+
+        @Override
+        public T next()
+        {
+            if (!hasNext()) throw new NoSuchElementException();
+            int current = stack.pop();
+            T item = heap.get(current);
+            int right = 2 * current + 2;
+            int left = 2 * current + 1;
+            if (right < heap.size())
+                stack.push(right);
+            if (left < heap.size())
+                stack.push(left);
+
+            return item;
+        }
+    }
+
+    public class BFSIterator implements Iterator<T>
+    {
+        private Queue<Integer> queue;
+
+        public BFSIterator()
+        {
+            queue = new LinkedList<>();
+            if (!heap.isEmpty())
+                queue.offer(0);
+        }
+
+        @Override
+        public boolean hasNext()
+        {
+            return !queue.isEmpty();
+        }
+
+        @Override
+        public T next()
+        {
+            if (!hasNext()) throw new NoSuchElementException();
+
+            int current = queue.poll();
+            T item = heap.get(current);
+
+            int right = 2 * current + 2;
+            int left = 2 * current + 1;
+
+            if (left < heap.size())
+                queue.offer(left);
+            if (right < heap.size())
+                queue.offer(right);
+
+            return item;
+        }
+
+
+    }
+
+
 }

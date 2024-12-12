@@ -9,6 +9,7 @@ import javafx.stage.Stage;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Random;
 
 
@@ -16,7 +17,9 @@ public class Controller {
 
     public ScrollPane scrollPane;
     @FXML
-    private ChoiceBox<String> prohlType;
+    private ChoiceBox<Priority> priority;
+    @FXML
+    private ChoiceBox<TraverseType> traverse;
 
     @FXML
     private TextField name, psc, allNo, manNo, womanNo;
@@ -33,12 +36,13 @@ public class Controller {
 
     public void initialize()
     {
-        heap = new PriorityHeap(AbstrHeap.Priority.NAME, PriorityHeap.BY_NAME);
+        heap = new PriorityHeap(Priority.NAME, PriorityHeap.BY_NAME);
 
         // Nastavení ChoiceBox
-        prohlType.setItems(FXCollections.observableArrayList("Podle názvu", "Podle počtu obyvatel"));
-        prohlType.setValue("Podle názvu");
-
+        priority.getItems().addAll(Priority.values());
+        priority.setValue(Priority.NAME);
+        traverse.getItems().addAll(TraverseType.values());
+        traverse.setValue(TraverseType.DFS);
         // Nastavení sloupců v tabulce
         nameColumn.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
         pscColumn.setCellValueFactory(cellData -> cellData.getValue().pscProperty().asObject().asString());
@@ -90,14 +94,20 @@ public class Controller {
 
     @FXML
     private void onUpdateButtonClick() {
-        if (prohlType.getValue().equals("Podle názvu")) {
-            heap.setPriority(AbstrHeap.Priority.NAME);
-        } else {
-            heap.setPriority(AbstrHeap.Priority.POPULATION);
-        }
+        heap.changePriority(priority.getValue());
         heap.rebuildHeap();
         observableList.clear();
-        observableList.addAll(heap.getAllItems());
+        observableList.addAll(traverse(traverse.getValue()));
+    }
+
+    private ArrayList<Obec> traverse(TraverseType type)
+    {
+        ArrayList<Obec> traversing = new ArrayList<>();
+
+        Iterator<Obec> iterator = heap.getIterator(type);
+        while (iterator.hasNext())
+            traversing.add(iterator.next());
+        return traversing;
     }
 
     @FXML

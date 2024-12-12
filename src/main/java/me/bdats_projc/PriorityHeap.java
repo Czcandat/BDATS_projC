@@ -16,7 +16,8 @@ public class PriorityHeap extends AbstrHeap<Obec>
         super(initialComparator);
     }
 
-    public void setPriority(Priority priority)
+
+    public void changePriority(Priority priority)
     {
         Comparator<Obec> newComparator;
         switch (priority)
